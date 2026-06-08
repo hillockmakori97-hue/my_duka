@@ -5,7 +5,7 @@ class Bank_account:
         self.owner_name=owner_name
         self.date_opened=date_opened
 
-    def check_balance(self,balance):
+    def check_balance(self):
         print(f'you have a balance of Ksh {self.balance}')
     def withdraw(self,amount):
         if self.balance>amount:
@@ -22,10 +22,14 @@ class Bank_account:
         Account opened on {self.date_opened}
         ''')
     def close_account(self,account):
+        print(f'account {account.account_no} was successfuly deleted')
         del account
-        print(f'account {account} was successfuly deleted')
 acc1=Bank_account('ac1',40000,'john','12/4/2021')
 acc1.withdraw(14000)
 print(acc1.balance) 
+acc1.check_balance()
 acc1.close_account(acc1)
+acc2=Bank_account('ac2',78000,'sydney','4/11/2025')
+acc2.check_details()
+
 
