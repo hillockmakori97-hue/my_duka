@@ -3,30 +3,38 @@ import psycopg2
 conn=psycopg2.connect(host='localhost',port=5432,user='postgres',password='rs3040bt',dbname='my_duka')
 curr=conn.cursor()
 products_data=[]
-# def view_products(products_data):
-#     curr.execute('select * from products' )
-#     products_data=curr.fetchall()
-#     return products_data
-# print(view_products(products_data))
-# # curr.execute("insert into products(name,buying_price,selling_price) values('shirt',1500,2000)")
-# # conn.commit()
-# # print(products_data)
-# def insert_products(values):
-#     curr.execute(f"insert into products(name,buying_price,selling_price) values{values}")
-#     conn.commit()
-# product1=('comb',50,70)
-# insert_products(product1)
+def view_products(products_data):
+    curr.execute('select * from products' )
+    products_data=curr.fetchall()
+    return products_data
+print(view_products(products_data))
+# curr.execute("insert into products(name,buying_price,selling_price) values('shirt',1500,2000)")
+# conn.commit()
 # print(products_data)
-# def insert_products2 (values):
-#     curr.execute('insert into products (name,buying_price,selling_price) values(%s,%s,%s)',values)
-#     curr.commit()
-# products3=('CPU,4500,5000')
-# insert_products2(products3)
-# print(products3)
+
+
+def insert_products(values):
+    curr.execute(f"insert into products(name,buying_price,selling_price) values{values}")
+    conn.commit()
+product1=('comb',50,70)
+insert_products(product1)
+print(products_data)
+
+
+def insert_products2 (values):
+    curr.execute('insert into products (name,buying_price,selling_price) values(%s,%s,%s)',values)
+    conn.commit()
+products3=('CPU',4500,5000)
+insert_products2(products3)
+print(products3)
+
+
 def insert_sales(values):
     curr.execute('insert into sales (pid,quantity) values(%s,%s)',values)
     conn.commit()
 sales1=(3,3)
+
+
 def view_table(table_name):
     curr.execute(f"select * from {table_name}")
     records=curr.fetchall()

@@ -17,3 +17,7 @@ colour = black
     has differentials = true
     has dual tank = false 
 behaviour ,,, races ,, tranport
+
+
+to dispaly dat from python in html we use jinja 
+jinja is a templatin gengin intreated in flas to render dymanic htm lpages 

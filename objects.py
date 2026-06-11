@@ -8,7 +8,11 @@ class Student:
         print(f'{self.name} studies')
     def details (self):
         print(f'{self.name} student number{self.student_no} studies {self.course}')
-
+    def eats (self):
+        print(f'{self.name} eats ')
+    def sleeps (self):
+        print(f'{self.name} sleeps')
+        
 #object 1
 student1=Student('jack','st1','Computer_science')
 print(student1.name)
