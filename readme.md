@@ -36,3 +36,7 @@ a useris provvided woth a form ti fill o
 2 merthod attribut ,,,,,,,,,,,this determmined what the server does with data or a resource 
         methods 
         get 
+
+
+
+select stock.stock_equantity from stock where pid = {}

@@ -1,5 +1,5 @@
 from flask import Flask,render_template,request,redirect,url_for
-from database import view_table,insert_products,insert_sales,insert_stock
+from database import view_table,insert_products,insert_sales,insert_stock,check_remaining_stock
 
 
 
@@ -38,19 +38,18 @@ def sales():
 def add_sales():
     pid=request.form['product_id']
     quantity=request.form['quantity']
-    values=(pid,quantity)
-    insert_sales(values)
+    new_sale=(pid,quantity)
+
+    
+    remining_stock=check_remaining_stock(pid)
+
+    if remining_stock <quantity:
+        print('Insufficient stock,add more')
+    insert_sales(new_sale)
+    
     return redirect(url_for('sales'))
 
 
-@app.route('/add_stock',methods=['GET','POST'])
-def add_stock():
-    if request.method=='POST':
-        product_id=request.form['product_id']
-        quantity=request.form ['stock_quantity']
-        values=(product_id,quantity)
-    return redirect(url_for('stock'))
-    
 
 
 @app.route('/login')
@@ -62,14 +61,35 @@ def login():
 def register():
     return render_template('register.html')
 
+
+
 @app.route('/stock')
 def stock():
     stock_data=view_table('stock')
-    return render_template('stock.html',stock_data=stock_data)
+    products=view_table('products')
+    return render_template('stock.html',stock_data=stock_data,products=products)
+
+
+
+
+@app.route('/add_stock',methods=['GET','POST'])
+def add_stock():
+    if request.method=='POST':
+        product_id=request.form['product_id']
+        quantity=request.form ['stock_quantity']
+        values=(product_id,quantity)
+        print('Stock Added Successfuly')
+    return redirect(url_for('stock'))
+
 
 
 @app.route('/index')
 def index():
     return render_template('index.html')
+
+
+
+
+
 
 app.run(debug=True)

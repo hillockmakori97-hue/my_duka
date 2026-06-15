@@ -4,6 +4,23 @@
 <div>
     <h1>products</h1>
     <div>
+        <form action='/add_stock' method="post">
+            <div>
+                <select class="form-select" aria-label="Default select example">
+                    <option selected>Select Stock</option>
+                    {% for i in products%}
+                    <option value="{{i[0]}}">{{i[1]}}</option>
+                    {% endfor %}
+                </select>
+            </div>
+            <div class="mb-3">
+                <label for="exampleInputPassword1" class="form-label">Stock Quantity</label>
+                <input type="number" name="stock_quantity" class="form-control" id="exampleInputPassword1">
+            </div>
+            <button type="submit" class="btn btn-primary">Add Product</button>
+        </form>
+    </div>
+    <div>
         <table id="example" class="table table-striped">
             <thead>
                 <tr>
@@ -26,19 +43,6 @@
             </tbody>
         </table>
     </div>
-    <div>
-        <form action='/add_stock' method="post">
-            <div class="mb-3">
-                <label for="exampleInputEmail1" class="form-label">Product_id </label>
-                <input type="text" name="product_id" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp">
-                <div id="emailHelp" class="form-text"></div>
-            </div>
-            <div class="mb-3">
-                <label for="exampleInputPassword1" class="form-label">Stock Quantity</label>
-                <input type="number" name="stock_quantity" class="form-control" id="exampleInputPassword1">
-            </div>
-            <button type="submit" class="btn btn-primary">Add Product</button>
-        </form>
-    </div>
+
 </div>
 {%endblock%}

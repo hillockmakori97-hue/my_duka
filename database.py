@@ -107,7 +107,11 @@ def profit_per_product():
     product_profit = curr.fetchall()
     return product_profit
 
-
-
-# class horse 
+def check_remaining_stock(pid):
+    curr.execute('select sum(stock.stock_quantity) from stock where pid=%s' (pid,))
+    total_stock=curr.fetchone()[0] or 0 
+    curr.execute('select sum(sales.quantity) from sales where pid=%s',(pid,))
+    total_sold=curr.fetchone()[0] or 0 
+    return total_stock - total_sold
+# class horse 2
 #iden
