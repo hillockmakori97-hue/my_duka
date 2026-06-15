@@ -36,17 +36,16 @@ def sales():
 
 @app.route('/add_sales',methods=['GET','POST'])
 def add_sales():
-    pid=request.form['product_id']
-    quantity=request.form['quantity']
-    new_sale=(pid,quantity)
+    if request.method=='POST':
+        pid=request.form['product_id']
+        quantity=int(request.form['quantity'])
+        new_sale=(pid,quantity)
+        remining_stock=int(check_remaining_stock(pid))
 
-    
-    remining_stock=check_remaining_stock(pid)
-
-    if remining_stock <quantity:
-        print('Insufficient stock,add more')
+        if remining_stock<quantity:
+            print('Insufficient stock,add more')
     insert_sales(new_sale)
-    
+
     return redirect(url_for('sales'))
 
 
@@ -78,6 +77,7 @@ def add_stock():
         product_id=request.form['product_id']
         quantity=request.form ['stock_quantity']
         values=(product_id,quantity)
+        insert_stock(values)
         print('Stock Added Successfuly')
     return redirect(url_for('stock'))
 
@@ -86,10 +86,5 @@ def add_stock():
 @app.route('/index')
 def index():
     return render_template('index.html')
-
-
-
-
-
 
 app.run(debug=True)

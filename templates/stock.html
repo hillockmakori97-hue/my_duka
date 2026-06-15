@@ -4,23 +4,6 @@
 <div>
     <h1>products</h1>
     <div>
-        <form action='/add_stock' method="post">
-            <div>
-                <select class="form-select" aria-label="Default select example">
-                    <option selected>Select Stock</option>
-                    {% for i in products%}
-                    <option value="{{i[0]}}">{{i[1]}}</option>
-                    {% endfor %}
-                </select>
-            </div>
-            <div class="mb-3">
-                <label for="exampleInputPassword1" class="form-label">Stock Quantity</label>
-                <input type="number" name="stock_quantity" class="form-control" id="exampleInputPassword1">
-            </div>
-            <button type="submit" class="btn btn-primary">Add Product</button>
-        </form>
-    </div>
-    <div>
         <table id="example" class="table table-striped">
             <thead>
                 <tr>
@@ -42,6 +25,51 @@
                 {% endfor %}
             </tbody>
         </table>
+    </div>
+
+
+    <div>
+        <!-- Button trigger modal -->
+        <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal">
+            Add Stock
+        </button>
+
+        <!-- Modal -->
+        <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h1 class="modal-title fs-5" id="exampleModalLabel">Modal title</h1>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <div>
+                            <form action='/add_stock' method="post">
+                                <div>
+                                    <select class="form-select" aria-label="Default select example" name="product_id">
+                                        <option selected>Select Stock</option>
+                                        {% for i in products%}
+                                        <option value="{{i[0]}}">{{i[1]}}</option>
+                                        {% endfor %}
+                                    </select>
+                                </div>
+                                <div class="mb-3">
+                                    <label for="exampleInputPassword1" class="form-label">Stock Quantity</label>
+                                    <input type="number" name="stock_quantity" class="form-control"
+                                        id="exampleInputPassword1">
+                                </div>
+                                <div class="modal-footer">
+                                    <button type="button" class="btn btn-secondary"
+                                        data-bs-dismiss="modal">Close</button>
+                                    <button type="submit" class="btn btn-primary">Submit Changes</button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
     </div>
 
 </div>
