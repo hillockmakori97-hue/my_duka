@@ -8,17 +8,17 @@ def view_products(products_data):
     products_data=curr.fetchall()
     return products_data
 print(view_products(products_data))
-# curr.execute("insert into products(name,buying_price,selling_price) values('shirt',1500,2000)")
-# conn.commit()
-# print(products_data)
+curr.execute("insert into products(name,buying_price,selling_price) values('shirt',1500,2000)")
+conn.commit()
+print(products_data)
 
 
 def insert_products(values):
-    curr.execute(f"insert into products(name,buying_price,selling_price) values{values}")
+    curr.execute(f"insert into products(name,buying_price,selling_price)values{values}")
     conn.commit()
-product1=('comb',50,70)
-insert_products(product1)
-print(products_data)
+# product1=('comb',50,70)
+# insert_products(product1)
+# print(products_data)
 
 
 def insert_products2 (values):
@@ -40,14 +40,13 @@ def view_table(table_name):
     records=curr.fetchall()
     return records
 
-# print(view_table(table_name))
 
 # insert_sales(sales1)
 print(view_table("sales"))
 sale2=(4,5)
 sale3=(6,11)
-# insert_sales(sale2)
-# insert_sales(sale3)
+insert_sales(sale2)
+insert_sales(sale3)
 sales_records=view_table("sales")
 print(sales_records)
 
@@ -62,52 +61,51 @@ insert_stock(stock2)
 insert_stock(stock3)
 print(view_table("stock"))
 def sales_per_day():
-    cur.execute("""
+    curr.execute("""
       select date(sales.created_at) as date, sum(sales.quantity * products.selling_price) as
       total_sales from sales join products on products.id = sales.pid  group by date;
     """)
-    daily_sales = cur.fetchall()
+    daily_sales = curr.fetchall()
     return daily_sales
 
 
 def sales_per_day():
-    cur.execute("""
+    curr.execute("""
       select date(sales.created_at) as date, sum(sales.quantity * products.selling_price) as
       total_sales from sales join products on products.id = sales.pid  group by date;
     """)
-    daily_sales = cur.fetchall()
+    daily_sales = curr.fetchall()
     return daily_sales
 
 
 def profit_per_day():
-    cur.execute("""
+    curr.execute("""
         select date(sales.created_at) as date, sum(sales.quantity *( products.selling_price -
         products.buying_price)) as total_sales from sales join products on products.id = sales.pid
          group by date;
     
     """)
-    daily_profit = cur.fetchall()
+    daily_profit = curr.fetchall()
     return daily_profit
 
 
 
 def sales_per_product():
-    cur.execute("""
+    curr.execute("""
         select products.name as p_name , sum(sales.quantity * products.selling_price)  as total_sales
         from products join sales on sales.pid = products.id group by p_name;
     """)
-    product_sales = cur.fetchall()
+    product_sales = curr.fetchall()
     return product_sales
 
 
 def profit_per_product():
-    cur.execute("""
+    curr.execute("""
         select products.name as p_name , sum(sales.quantity *( products.selling_price - 
         products.buying_price))  as total_sales from products join sales on sales.pid = products.id group by p_name;
     """)
-    product_profit = cur.fetchall()
+    product_profit = curr.fetchall()
     return product_profit
-
 
 
 

@@ -11,7 +11,7 @@
                     <th>name</th>
                     <th>buying_price</th>
                     <th>selling_price</th>
-                    
+
                 </tr>
             </thead>
             <tbody>
@@ -26,6 +26,23 @@
             </tbody>
         </table>
     </div>
+</div>
+<div class="table">
+    <form action='/add_products' method="post">
+        <div class="mb-3">
+            <label for="exampleInputEmail1" class="form-label">Product name</label>
+            <input type="text" name="product_name" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp">
+            <div id="emailHelp" class="form-text"></div>
+        </div>
+        <div class="mb-3">
+            <label for="exampleInputPassword1" class="form-label">Buying Price</label>
+            <input type="number" name="buying_price" class="form-control" id="exampleInputPassword1">
+        </div>
+        <div class="mb-3">
+            <label for="exampleInputPassword1" class="form-label">Selling Price</label>
+            <input type="number" name="selling_price" class="form-control" id="exampleInputPassword1">
+            <button type="submit" class="btn btn-primary">Add Product</button>
+    </form>
 </div>
 
 

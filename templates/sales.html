@@ -1,2 +1,47 @@
 {%extends 'base.html' %}
 {% block title %}sales{% endblock %}
+{%block content%}
+<div>
+    <h1>products</h1>
+    <div>
+        <table id="example" class="table table-striped">
+            <thead>
+                <tr>
+                    <th>id</th>
+                    <th>pid</th>
+                    <th>Quantity</th>
+                    <th>Created At</th </tr>
+            </thead>
+            <tbody>
+                {% for i in sales_data %}
+                <tr>
+                    <td>{{ i[0] }}</td>
+                    <td>{{ i[1] }}</td>
+                    <td>{{ i[2] }}</td>
+                    <td>{{ i[3] }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+    <div>
+        <form action='/add_sales' method="post">
+            <div>
+                <select class="form-select" aria-label="Default select example" name="product_id">
+                    <option selected>Select product</option>
+                    {% for product in products %}
+                    <option value="{{product[0]}}">{{ product[1] }}</option>
+                    {% endfor %}
+                   
+                </select>
+            </div>
+            <div class="mb-3">
+                <label for="exampleInputPassword1" class="form-label">Quantity</label>
+                <input type="number" name="quantity" class="form-control" id="exampleInputPassword1">
+            </div>
+
+            <button type="submit" class="btn btn-primary">Add Sale</button>
+        </form>
+    </div>
+</div>
+{%endblock%}
