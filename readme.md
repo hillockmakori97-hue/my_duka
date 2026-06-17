@@ -40,3 +40,7 @@ a useris provvided woth a form ti fill o
 
 
 select stock.stock_equantity from stock where pid = {}
+
+
+
+a sue

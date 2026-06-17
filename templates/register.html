@@ -1,11 +1,29 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
-</head>
-<body>
-    <p>please register</p>
-</body>
-</html>
+{%extends 'base.html' %}
+{%block title%}Register{%endblock%}
+
+{%block content%}<p>Register Page</p>
+<div>
+    <form action="/register" method="post">
+        <div class="mb-3">
+            <label for="exampleInputEmail1" class="form-label">Full Name</label>
+            <input type="text" name="full_name" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp">
+        </div>
+        <div class="mb-3">
+            <label for="exampleInputEmail1" class="form-label">Email address</label>
+            <input type="email" class="form-control" name="email" id="exampleInputEmail1" aria-describedby="emailHelp">
+        </div>
+        <div class="mb-3">
+            <label for="exampleInputEmail1" class="form-label">Phone Number</label>
+            <input type="tel" name="phone_no" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp">
+        </div>
+        <div class="mb-3">
+            <label for="exampleInputPassword1" class="form-label">Password</label>
+            <input type="password" name="password" class="form-control" id="exampleInputPassword1">
+        </div>
+
+
+        <button type="submit" class="btn btn-primary">Submit</button>
+    </form>
+</div>
+
+{%endblock%}

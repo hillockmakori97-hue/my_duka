@@ -121,7 +121,13 @@ def check_remaining_stock(pid):
 def delete_table(table_name):
     curr.execute(f'delete from {table_name}')
     conn.commit()
+def check_user_exists(email):
+    curr.execute('select * from users where email=%s',(email,))
+    user=curr.fetchone()
+    return user
 
-    
+def create_user(user_details):
+    curr.execute('insert into users(full_name,email,phone_number,password)values(%s,%s,%s,%s)',user_details)
+    conn.commit()
 # class horse 2
 #
