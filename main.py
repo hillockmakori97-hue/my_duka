@@ -1,8 +1,8 @@
-from flask import Flask,render_template,request,redirect,url_for,flash
-from database import view_table,insert_products,insert_sales,insert_stock,check_remaining_stock,check_user_exists,create_user
+from flask import Flask,render_template,request,redirect,url_for,flash,session
+from database import view_table,insert_products,insert_sales,insert_stock,check_remaining_stock,check_user_exists,create_user,sales_per_day,sales_per_product,profit_per_product,profit_per_day
 from flask_bcrypt import Bcrypt
 import os
-
+from functools import wraps
 app= Flask(__name__)
 # bcrypt instance with flask app
 bcrypt=Bcrypt(app)
@@ -13,7 +13,17 @@ def home():
     number=100
     return render_template('index.html',value = number)
 
+def login_required(f):
+    @wraps(f)
+    def protected(*args,**kwargs):
+        if 'email' not in session:
+            return redirect(url_for('login'))
+        return f(*args,**kwargs)
+    return protected
+
+
 @app.route('/products')
+@login_required
 def products():
    products_data=view_table('products')
    return render_template('products.html',products_data=products_data)
@@ -32,6 +42,7 @@ def add_products():
 
 
 @app.route('/sales')
+@login_required
 def sales():
     sales_data=view_table('sales')
     products=view_table('products')
@@ -39,6 +50,7 @@ def sales():
 
 
 @app.route('/add_sales',methods=['GET','POST'])
+@login_required
 def add_sales():
     if request.method=='POST':
         pid=request.form['product_id']
@@ -55,8 +67,23 @@ def add_sales():
 
 
 
-@app.route('/login')
+@app.route('/login',methods=('GET','POST'))
 def login():
+    if request.method=='POST':
+        email=request.form['email']
+        password=request.form['password']
+        registered_user=check_user_exists(email)
+        if not registered_user:
+            flash('Non Existent user, please register','danger')
+        else:
+            if bcrypt.check_password_hash(registered_user[-1],password):
+                session['email']=email
+                flash('login succes','success')
+                return redirect(url_for('dashboard'))
+            else:
+                flash('incorrect password,try again','danger')
+            # return
+        
     return render_template('login.html') 
 
 
@@ -84,6 +111,7 @@ def register():
 
 
 @app.route('/stock')
+@login_required
 def stock():
     stock_data=view_table('stock')
     products=view_table('products')
@@ -103,10 +131,34 @@ def add_stock():
 
     return redirect(url_for('stock'))
 
+@app.route('/dashboard')
+def dashboard():
+    product_sales=sales_per_product()
+    product_profit=profit_per_product()
 
+    daily_sales=sales_per_day()
+    daily_profit=profit_per_day()
+
+    product_names= [i[0] for i in product_sales]
+    prod_profit= [ i[1] for i in product_profit]
+    prod_sales=[i[1] for i in product_sales]
+
+
+    dates=[i[0] for i in daily_sales]
+    day_sales=[i[1] for i in daily_sales]
+    day_profit=[i[1] for i in daily_profit]
+
+
+    return render_template('dashboard.html',
+                        product_names=product_names,prod_profit=prod_profit,prod_sales=prod_sales,
+                        dates=dates,day_sales=day_sales,day_profit=day_profit)
 
 @app.route('/index')
 def index():
     return render_template('index.html')
-
+@app.route('/logout')
+def logout():
+    session.pop('email',None)
+    flash('Logged out successfully','success')
+    return redirect(url_for('login'))
 app.run(debug=True)

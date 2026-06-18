@@ -43,4 +43,25 @@ select stock.stock_equantity from stock where pid = {}
 
 
 
-a sue
+def login_required(f):
+    @wraps(f)
+    def protected(*args,**kwargs):
+        if 'email' not in session:
+            return redirect(url_for('login'))
+        return f(*args,**kwargs)
+    return protected
+
+
+
+
+    def trial(f):
+    @wraps(f)
+    def protected(*k,**kwar):
+        if 'email' not in session:
+            return redirect(urlfor('login'))
+        return f(*k,**kwar)
+    return protected
+
+
+
+

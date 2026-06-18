@@ -129,5 +129,7 @@ def check_user_exists(email):
 def create_user(user_details):
     curr.execute('insert into users(full_name,email,phone_number,password)values(%s,%s,%s,%s)',user_details)
     conn.commit()
+
+
 # class horse 2
 #
