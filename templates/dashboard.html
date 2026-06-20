@@ -4,16 +4,81 @@
 {%block content%}<p>Dashboard</p>
 
 <div>
-<p>{{product_names}}</p>
-<p>{{prod_profit}}</p>
-<p>{{prod_sales}}</p>
-<p>{{dates}}</p>
-<p>{{day_sales}}</p>
-<p>{{day_profit}}</p>
+    <p>{{product_names}}</p>
+    <p>{{prod_profit}}</p>
+    <p>{{prod_sales}}</p>
+    <p>{{dates}}</p>
+    <p>{{day_sales}}</p>
+    <p>{{day_profit}}</p>
 
+    <div>
+        <canvas id="line-chart" width="800" height="450"></canvas>
+    </div>
+
+    <div>
+        <canvas id="bar-chart" width="800" height="450"></canvas>
+    </div>
 </div>
 
+<script>
 
+    new Chart(document.getElementById("line-chart"), {
+    type: 'line',
+    data: {
+        labels: {{ dates | safe }},
+        datasets: [{
+            data: {{ day_sales | safe }},
+            label: "Sales Per Day",
+            borderColor: "#3e95cd",
+            fill: false
+        }, {
+            data: {{ prod_sales | safe }},
+            label: "Sales Per Product",
+            borderColor: "#8e5ea2",
+            fill: false
+        }, {
+            data: {{ prod_profit | safe }},
+            label: "Profit Per Product",
+            borderColor: "#e8c3b9",
+            fill: false
+        }]
+    },
+    options: {
+        title: {
+            display: true,
+            text: 'Daily Sales Against Profit Line chart '
+        }
+    }
+});
+
+
+    // Bar chart
+    new Chart(document.getElementById("bar-chart"), {
+        type: 'bar',
+        data: {
+            labels: {{product_names | safe }},
+            datasets: [
+                {
+                    label: "Population (millions)",
+                    backgroundColor: ["#3e95cd", "#8e5ea2", "#3cba9f", "#e8c3b9", "#c45850"],
+                    data: {{ prod_profit | safe }}
+                },
+                 {
+                    label: "Population (millions)",
+                    backgroundColor: ["#3e95cd", "#8e5ea2", "#3cba9f", "#e8c3b9", "#c45850"],
+                    data: {{ prod_sales | safe }}
+                }
+            ]
+        },
+        options: {
+            legend: { display: false },
+            title: {
+                display: true,
+                text: 'Daily Sales Against Profit Bar chart'
+            }
+        }
+    });
+</script>
 
 
 {%endblock%}
