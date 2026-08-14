@@ -131,6 +131,56 @@ def add_stock():
 
     return redirect(url_for('stock'))
 
+@app.route('/sales')
+def sales_dashboard():
+    # Shop sales data with customer satisfaction ratings
+    sales_data = [
+        {
+            "receipt_id": "RCP-1001",
+            "customer": "Alice W.",
+            "item": "Safaricom Airtime & Electronics",
+            "total": "KSh 4,500",
+            "satisfaction": "Very Satisfied",
+            "rating": 5,
+        },
+        {
+            "receipt_id": "RCP-1002",
+            "customer": "Brian K.",
+            "item": "Groceries & Supplies",
+            "total": "KSh 1,200",
+            "satisfaction": "Satisfied",
+            "rating": 4,
+        },
+        {
+            "receipt_id": "RCP-1003",
+            "customer": "Catherine M.",
+            "item": "Household Goods",
+            "total": "KSh 8,700",
+            "satisfaction": "Very Satisfied",
+            "rating": 5,
+        },
+        {
+            "receipt_id": "RCP-1004",
+            "customer": "David O.",
+            "item": "Beverages & Snacks",
+            "total": "KSh 650",
+            "satisfaction": "Neutral",
+            "rating": 3,
+        },
+        {
+            "receipt_id": "RCP-1005",
+            "customer": "Evelyn N.",
+            "item": "Stationery",
+            "total": "KSh 2,100",
+            "satisfaction": "Satisfied",
+            "rating": 4,
+        },
+    ]
+
+    return render_template('sales.html', sales=sales_data)
+
+
+
 @app.route('/dashboard')
 def dashboard():
     product_sales=sales_per_product()

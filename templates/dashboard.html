@@ -1,84 +1,251 @@
-{%extends 'base.html' %}
-{%block title%}Dashboard{%endblock%}
+{% extends 'base.html' %}
+{% block title %} Dashboard {% endblock %}
 
-{%block content%}<p>Dashboard</p>
+{% block content %}
+<!-- Include Chart.js & Bootstrap Icons -->
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
 
-<div>
-    <p>{{product_names}}</p>
-    <p>{{prod_profit}}</p>
-    <p>{{prod_sales}}</p>
-    <p>{{dates}}</p>
-    <p>{{day_sales}}</p>
-    <p>{{day_profit}}</p>
+<div class="bg-light min-vh-100 py-4 px-3 px-md-5">
+    <div class="container-fluid px-0">
 
-    <div>
-        <canvas id="line-chart" width="800" height="450"></canvas>
-    </div>
+        <!-- Page Header -->
+        <div class="d-flex justify-content-between align-items-center mb-4">
+            <div>
+                <h2 class="fw-bold text-dark mb-1">Analytics Dashboard</h2>
+                <p class="text-secondary small mb-0">Overview of daily sales performance, profits, and product metrics.</p>
+            </div>
+            <div>
+                <span class="badge bg-white text-dark border px-3 py-2 rounded-pill font-monospace small shadow-sm">
+                    <i class="bi bi-calendar3 me-1 text-primary"></i> Real-time Analytics
+                </span>
+            </div>
+        </div>
 
-    <div>
-        <canvas id="bar-chart" width="800" height="450"></canvas>
+        <!-- Data Summary Tables Section -->
+        <div class="row g-4 mb-4">
+            
+            <!-- Product Performance Table -->
+            <div class="col-12 col-xl-6">
+                <div class="card border-0 shadow-sm rounded-4 bg-white overflow-hidden h-100">
+                    <div class="card-header bg-white border-bottom p-3 p-md-4 d-flex justify-content-between align-items-center">
+                        <div>
+                            <h5 class="fw-bold text-dark mb-0">Product Metrics</h5>
+                            <span class="text-muted small">Sales & profit totals per item</span>
+                        </div>
+                        <span class="badge bg-primary bg-opacity-10 text-primary px-3 py-1.5 rounded-pill">Products</span>
+                    </div>
+                    <div class="card-body p-0">
+                        <div class="table-responsive">
+                            <table class="table table-hover align-middle mb-0">
+                                <thead class="bg-light border-bottom text-uppercase text-muted" style="font-size: 11px; letter-spacing: 0.5px;">
+                                    <tr>
+                                        <th class="ps-4 py-3">Product Name</th>
+                                        <th class="py-3">Sales</th>
+                                        <th class="pe-4 py-3">Profit</th>
+                                    </tr>
+                                </thead>
+                                <tbody class="border-top-0">
+                                    {% for name in product_names %}
+                                    <tr>
+                                        <td class="ps-4 py-3 fw-bold text-dark">{{ name }}</td>
+                                        <td class="py-3 font-monospace text-secondary">{{ prod_sales[loop.index0] }}</td>
+                                        <td class="pe-4 py-3 font-monospace fw-semibold text-success">{{ prod_profit[loop.index0] }}</td>
+                                    </tr>
+                                    {% else %}
+                                    <tr>
+                                        <td colspan="3" class="text-center py-4 text-muted">No product metrics available.</td>
+                                    </tr>
+                                    {% endfor %}
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Daily Sales Table -->
+            <div class="col-12 col-xl-6">
+                <div class="card border-0 shadow-sm rounded-4 bg-white overflow-hidden h-100">
+                    <div class="card-header bg-white border-bottom p-3 p-md-4 d-flex justify-content-between align-items-center">
+                        <div>
+                            <h5 class="fw-bold text-dark mb-0">Daily Performance</h5>
+                            <span class="text-muted small">Sales & profit breakdown by date</span>
+                        </div>
+                        <span class="badge bg-success bg-opacity-10 text-success px-3 py-1.5 rounded-pill">Timeline</span>
+                    </div>
+                    <div class="card-body p-0">
+                        <div class="table-responsive" style="max-height: 280px; overflow-y: auto;">
+                            <table class="table table-hover align-middle mb-0">
+                                <thead class="bg-light border-bottom text-uppercase text-muted sticky-top" style="font-size: 11px; letter-spacing: 0.5px;">
+                                    <tr>
+                                        <th class="ps-4 py-3">Date</th>
+                                        <th class="py-3">Daily Sales</th>
+                                        <th class="pe-4 py-3">Daily Profit</th>
+                                    </tr>
+                                </thead>
+                                <tbody class="border-top-0">
+                                    {% for d in dates %}
+                                    <tr>
+                                        <td class="ps-4 py-3 font-monospace text-dark">{{ d }}</td>
+                                        <td class="py-3 font-monospace text-secondary">{{ day_sales[loop.index0] }}</td>
+                                        <td class="pe-4 py-3 font-monospace fw-semibold text-success">
+                                            {% if day_profit %}
+                                                {{ day_profit[loop.index0] }}
+                                            {% else %}
+                                                -
+                                            {% endif %}
+                                        </td>
+                                    </tr>
+                                    {% else %}
+                                    <tr>
+                                        <td colspan="3" class="text-center py-4 text-muted">No daily metrics available.</td>
+                                    </tr>
+                                    {% endfor %}
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+        <!-- Charts Grid Section -->
+        <div class="row g-4 mb-4">
+            
+            <!-- Daily Sales Line Chart -->
+            <div class="col-12 col-xl-6">
+                <div class="card border-0 shadow-sm rounded-4 bg-white h-100">
+                    <div class="card-header bg-white border-bottom p-4 d-flex justify-content-between align-items-center">
+                        <div>
+                            <h5 class="fw-bold text-dark mb-0">Daily Sales Trend</h5>
+                            <span class="text-muted small">Revenue logged per calendar day</span>
+                        </div>
+                        <div class="bg-primary bg-opacity-10 text-primary p-2 rounded-3">
+                            <i class="bi bi-graph-up fs-5"></i>
+                        </div>
+                    </div>
+                    <div class="card-body p-4">
+                        <div style="position: relative; height: 320px; width: 100%;">
+                            <canvas id="line-chart"></canvas>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Product Profit vs Sales Bar Chart -->
+            <div class="col-12 col-xl-6">
+                <div class="card border-0 shadow-sm rounded-4 bg-white h-100">
+                    <div class="card-header bg-white border-bottom p-4 d-flex justify-content-between align-items-center">
+                        <div>
+                            <h5 class="fw-bold text-dark mb-0">Product Performance</h5>
+                            <span class="text-muted small">Comparison of revenue vs net profit per item</span>
+                        </div>
+                        <div class="bg-success bg-opacity-10 text-success p-2 rounded-3">
+                            <i class="bi bi-bar-chart-line fs-5"></i>
+                        </div>
+                    </div>
+                    <div class="card-body p-4">
+                        <div style="position: relative; height: 320px; width: 100%;">
+                            <canvas id="bar-chart"></canvas>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
     </div>
 </div>
 
+<!-- Chart Configurations -->
 <script>
+document.addEventListener("DOMContentLoaded", function() {
 
-    new Chart(document.getElementById("line-chart"), {
-    type: 'line',
-    data: {
-        labels: {{ dates | safe }},
-        datasets: [{
-            data: {{ day_sales | safe }},
-            label: "Sales Per Day",
-            borderColor: "#3e95cd",
-            fill: false
-        }, {
-            data: {{ prod_sales | safe }},
-            label: "Sales Per Product",
-            borderColor: "#8e5ea2",
-            fill: false
-        }, {
-            data: {{ prod_profit | safe }},
-            label: "Profit Per Product",
-            borderColor: "#e8c3b9",
-            fill: false
-        }]
-    },
-    options: {
-        title: {
-            display: true,
-            text: 'Daily Sales Against Profit Line chart '
+    // 1. Daily Sales Line Chart
+    const ctxLine = document.getElementById("line-chart").getContext("2d");
+    new Chart(ctxLine, {
+        type: 'line',
+        data: {
+            labels: {{ dates | safe }},
+            datasets: [{
+                label: "Sales Per Day",
+                data: {{ day_sales | safe }},
+                borderColor: "#0d6efd",
+                backgroundColor: "rgba(13, 110, 253, 0.08)",
+                fill: true,
+                tension: 0.3,
+                borderWidth: 2.5,
+                pointBackgroundColor: "#0d6efd",
+                pointRadius: 4
+            }]
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            plugins: {
+                legend: {
+                    position: 'top',
+                    labels: { font: { family: 'system-ui', size: 12 } }
+                }
+            },
+            scales: {
+                x: {
+                    grid: { display: false },
+                    ticks: { font: { size: 11 }, maxRotation: 45 }
+                },
+                y: {
+                    grid: { color: "#f1f5f9" },
+                    ticks: { font: { size: 11 } }
+                }
+            }
         }
-    }
-});
+    });
 
-
-    // Bar chart
-    new Chart(document.getElementById("bar-chart"), {
+    // 2. Product Revenue vs Profit Bar Chart
+    const ctxBar = document.getElementById("bar-chart").getContext("2d");
+    new Chart(ctxBar, {
         type: 'bar',
         data: {
-            labels: {{product_names | safe }},
+            labels: {{ product_names | safe }},
             datasets: [
                 {
-                    label: "Population (millions)",
-                    backgroundColor: ["#3e95cd", "#8e5ea2", "#3cba9f", "#e8c3b9", "#c45850"],
-                    data: {{ prod_profit | safe }}
-                },
-                 {
-                    label: "Population (millions)",
-                    backgroundColor: ["#3e95cd", "#8e5ea2", "#3cba9f", "#e8c3b9", "#c45850"],
+                    label: "Product Sales",
+                    backgroundColor: "#0d6efd",
+                    borderRadius: 6,
                     data: {{ prod_sales | safe }}
+                },
+                {
+                    label: "Product Profit",
+                    backgroundColor: "#198754",
+                    borderRadius: 6,
+                    data: {{ prod_profit | safe }}
                 }
             ]
         },
         options: {
-            legend: { display: false },
-            title: {
-                display: true,
-                text: 'Daily Sales Against Profit Bar chart'
+            responsive: true,
+            maintainAspectRatio: false,
+            plugins: {
+                legend: {
+                    position: 'top',
+                    labels: { font: { family: 'system-ui', size: 12 } }
+                }
+            },
+            scales: {
+                x: {
+                    grid: { display: false },
+                    ticks: { font: { size: 11 } }
+                },
+                y: {
+                    grid: { color: "#f1f5f9" },
+                    ticks: { font: { size: 11 } }
+                }
             }
         }
     });
+
+});
 </script>
-
-
-{%endblock%}
+{% endblock %}
